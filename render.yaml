@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: footwearcraft-saas
+    env: python
+    buildCommand: pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput
+    startCommand: gunicorn footwear_saas.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.4
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DJANGO_SETTINGS_MODULE
+        value: footwear_saas.settings
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        value: "*"
