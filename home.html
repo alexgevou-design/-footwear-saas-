@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+
+{% block title %}FootwearCraft SaaS - Professional Footwear Production Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h1 class="display-4 fw-bold mb-4">Professional Footwear Production Platform</h1>
+                <p class="lead mb-4">Design, manufacture, and manage your footwear business with our comprehensive SaaS solution. From custom designs to automated invoicing and accounting.</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <a href="{% url 'web:catalog' %}" class="btn btn-primary btn-lg me-md-2">
+                        <i class="fas fa-shoe-prints me-2"></i>Browse Products
+                    </a>
+                    <a href="{% url 'web:size_converter' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-ruler me-2"></i>Size Converter
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="fw-bold">Platform Features</h2>
+                <p class="lead text-muted">Everything you need to run a successful footwear business</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="fas fa-palette fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Custom Design Tool</h5>
+                        <p class="card-text">Advanced 3D design interface for creating custom footwear with material selection, color customization, and real-time pricing.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="fas fa-industry fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Production Management</h5>
+                        <p class="card-text">Track production orders, manage inventory, monitor quality control, and optimize manufacturing workflows.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="fas fa-calculator fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Auto Accounting</h5>
+                        <p class="card-text">Automated invoice generation, payment tracking, double-entry bookkeeping, and comprehensive financial reporting.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="fas fa-users fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">B2B Customer Portal</h5>
+                        <p class="card-text">Wholesale customer management with tiered pricing, credit limits, and bulk order processing.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="fas fa-ruler-combined fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">International Sizing</h5>
+                        <p class="card-text">Smart size conversion between US, EU, UK, JP, and CN sizing standards for global market reach.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="fas fa-chart-line fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Analytics Dashboard</h5>
+                        <p class="card-text">Real-time business insights, sales analytics, production metrics, and financial performance tracking.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+{% if featured_products %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="fw-bold">Featured Products</h2>
+                <p class="lead text-muted">Discover our latest footwear designs</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            {% for product in featured_products %}
+            <div class="col-md-4">
+                <div class="card product-card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.description|truncatewords:20 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="h5 text-primary">${{ product.base_price }}</span>
+                            <span class="badge bg-secondary">{{ product.get_gender_display }}</span>
+                        </div>
+                        {% if product.customizable %}
+                            <span class="badge bg-success mb-2">Customizable</span>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'web:product_detail' product.id %}" class="btn btn-outline-primary">
+                                <i class="fas fa-eye me-2"></i>View Details
+                            </a>
+                            {% if product.customizable %}
+                                <a href="{% url 'web:custom_design' product.id %}" class="btn btn-primary">
+                                    <i class="fas fa-palette me-2"></i>Customize
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'web:catalog' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-th-large me-2"></i>View All Products
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Categories Section -->
+{% if categories %}
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="fw-bold">Product Categories</h2>
+                <p class="lead text-muted">Explore our diverse range of footwear categories</p>
+            </div>
+        </div>
+        
+        <div class="row g-3">
+            {% for category in categories %}
+            <div class="col-md-3 col-sm-6">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h6 class="card-title">{{ category.name }}</h6>
+                        <a href="{% url 'web:catalog' %}?category={{ category.id }}" class="btn btn-sm btn-outline-primary">
+                            Browse
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="fw-bold mb-4">Ready to Transform Your Footwear Business?</h2>
+                <p class="lead mb-4">Join hundreds of footwear manufacturers and retailers who trust our platform for their business operations.</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'admin:login' %}" class="btn btn-light btn-lg me-md-2">
+                            <i class="fas fa-sign-in-alt me-2"></i>Get Started
+                        </a>
+                    {% else %}
+                        <a href="{% url 'web:dashboard' %}" class="btn btn-light btn-lg me-md-2">
+                            <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'web:contact' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-envelope me-2"></i>Contact Sales
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

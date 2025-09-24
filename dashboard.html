@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - FootwearCraft SaaS{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">Dashboard</h2>
+        </div>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-subtitle mb-2 text-muted">My Designs</h6>
+                            <h4 class="card-title">{{ user_designs|length }}</h4>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-palette fa-2x text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-subtitle mb-2 text-muted">Invoices</h6>
+                            <h4 class="card-title">{{ user_invoices|length }}</h4>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-file-invoice fa-2x text-success"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% if wholesale_customer %}
+        <div class="col-md-3">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-subtitle mb-2 text-muted">Discount Tier</h6>
+                            <h4 class="card-title text-capitalize">{{ wholesale_customer.discount_tier }}</h4>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-percentage fa-2x text-warning"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-subtitle mb-2 text-muted">Credit Limit</h6>
+                            <h4 class="card-title">${{ wholesale_customer.credit_limit }}</h4>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-credit-card fa-2x text-info"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="row">
+        <!-- Recent Designs -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Recent Custom Designs</h5>
+                    <a href="{% url 'web:catalog' %}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-plus me-1"></i>New Design
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if user_designs %}
+                        {% for design in user_designs %}
+                        <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                            <div>
+                                <h6 class="mb-1">{{ design.design_name }}</h6>
+                                <small class="text-muted">{{ design.base_product.name }}</small>
+                            </div>
+                            <div class="text-end">
+                                <div class="mb-1">
+                                    {% if design.approved %}
+                                        <span class="badge bg-success">Approved</span>
+                                    {% else %}
+                                        <span class="badge bg-warning">Pending</span>
+                                    {% endif %}
+                                </div>
+                                <small class="text-muted">${{ design.total_price }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center py-3">
+                            <i class="fas fa-palette fa-2x mb-2 d-block"></i>
+                            No custom designs yet. Start creating your unique footwear!
+                        </p>
+                        <div class="text-center">
+                            <a href="{% url 'web:catalog' %}" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Create Design
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Invoices -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Invoices</h5>
+                </div>
+                <div class="card-body">
+                    {% if user_invoices %}
+                        {% for invoice in user_invoices %}
+                        <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                            <div>
+                                <h6 class="mb-1">{{ invoice.invoice_number }}</h6>
+                                <small class="text-muted">{{ invoice.invoice_date }}</small>
+                            </div>
+                            <div class="text-end">
+                                <div class="mb-1">
+                                    {% if invoice.status == 'paid' %}
+                                        <span class="badge bg-success">Paid</span>
+                                    {% elif invoice.status == 'overdue' %}
+                                        <span class="badge bg-danger">Overdue</span>
+                                    {% elif invoice.status == 'sent' %}
+                                        <span class="badge bg-warning">Sent</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary text-capitalize">{{ invoice.status }}</span>
+                                    {% endif %}
+                                </div>
+                                <small class="text-muted">${{ invoice.total_amount }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center py-3">
+                            <i class="fas fa-file-invoice fa-2x mb-2 d-block"></i>
+                            No invoices yet.
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Wholesale Customer Info -->
+    {% if wholesale_customer %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Wholesale Account Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Business Name:</strong> {{ wholesale_customer.business_name }}</p>
+                            <p><strong>Contact Person:</strong> {{ wholesale_customer.contact_person }}</p>
+                            <p><strong>Email:</strong> {{ wholesale_customer.email }}</p>
+                            <p><strong>Phone:</strong> {{ wholesale_customer.phone }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Discount Tier:</strong> 
+                                <span class="badge bg-primary text-capitalize">{{ wholesale_customer.discount_tier }}</span>
+                                ({{ wholesale_customer.get_discount_percentage }}% discount)
+                            </p>
+                            <p><strong>Credit Limit:</strong> ${{ wholesale_customer.credit_limit }}</p>
+                            <p><strong>Current Balance:</strong> ${{ wholesale_customer.current_balance }}</p>
+                            <p><strong>Payment Terms:</strong> {{ wholesale_customer.payment_terms }} days</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
