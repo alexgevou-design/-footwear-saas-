@@ -1,0 +1,9 @@
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 200 18888
+Forbidden: /api/
+"GET /api/ HTTP/1.1" 403 58
+"GET / HTTP/1.1" 200 18888
+"GET / HTTP/1.1" 200 18888
+"GET /admin/ HTTP/1.1" 302 0
+Forbidden: /api/
+"GET /api/ HTTP/1.1" 403 58
